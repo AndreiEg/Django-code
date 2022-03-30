@@ -22,6 +22,12 @@
             <li><a href="" class="nav-link px-2 link-dark">Settings</a></li>
             <li><a href="#" class="nav-link px-2 link-dark">About us</a></li>
         </ul>
+
+        <form class="d-flex" method=POST action="{% url 'search-venues' %}">
+            {% csrf_token %}
+            <input class="form-control me-2" type="search" placeholder="Search venue" aria-label="Search" name="searched">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </form>
         {% if user.is_authenticated %}
             <div class="col-md-3 text-end">
                 User: {{ user }}
