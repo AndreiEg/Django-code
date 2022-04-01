@@ -18,7 +18,7 @@ class VenueFormAdmin(ModelForm):
         }
 
         widgets = {
-            'name': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Venue Name'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Venue Name'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Address'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone number'}),
             'web': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Web Site'}),

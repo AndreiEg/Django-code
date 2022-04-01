@@ -8,6 +8,7 @@
         <div class="card-header">
             Venue
         </div>
+        {% if venue.approved %}
    <div class="card-body">
         <h5 class="card-title">
             {{ venue }}
@@ -16,20 +17,18 @@
         <ul>
    {{ venue.address }}
     {{ venue.phone }}
-       {{ venue.manager }}
+       {{ venue.owner }}
+       Approved: {{ venue.approved }}
     <a href="{% url 'show-venue' venue.id %}">{{ venue.web }}</a><br/>
 
         </ul>
-       {% if venue.venue_image %}
+       {%if venue.venue_image %}
        <img src="{{ venue.venue_image.url }}" width=500>
        {% endif %}
         </p>
        </div>
+        {% endif %}
     </div>
 </div>
-
-
-
-
 {% endblock %}
 

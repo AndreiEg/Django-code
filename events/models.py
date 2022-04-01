@@ -10,6 +10,7 @@ class Venue(models.Model):
     email = models.EmailField('Email')
     owner = models.IntegerField("Venue owner", blank=False, default=1)
     venue_image = models.ImageField(null=True, blank=True, upload_to="images/")
+    approved = models.BooleanField('Approved', default=False)
 
     def __str__(self):
         return self.name
