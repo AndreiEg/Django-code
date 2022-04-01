@@ -4,6 +4,7 @@
 {% endblock %}
 {% block content %}
 <div class="container">
+    {% if user.is_authenticated %}
     <h1>Add Venue to DataBase</h1>
     <br/><br/>
     {% if submitted %}
@@ -14,6 +15,10 @@
         {% csrf_token %}
         <input type="submit" value="Submit" class="btn btn-secondary">
     </form>
+    {% endif %}
+    {% else %}
+    <h1>Sorry, please login</h1>
+    <a href="{% url 'login' %}">Login here</a>
     {% endif %}
 </div>
 {% endblock %}
