@@ -20,6 +20,9 @@
     <a href="{% url 'show-venue' venue.id %}">{{ venue.web }}</a><br/>
 
         </ul>
+       {% if venue.venue_image %}
+       <img src="{{ venue.venue_image.url }}" width=500>
+       {% endif %}
         </p>
        </div>
     </div>

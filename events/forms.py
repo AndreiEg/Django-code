@@ -6,13 +6,15 @@ from .models import Venue
 class VenueFormAdmin(ModelForm):
     class Meta:
         model = Venue
-        fields = ('name', 'address', 'phone', 'web')
+        fields = ('name', 'address', 'phone', 'web', 'venue_image')
 
         labels = {
             'name': '',
             'address': '',
             'phone': '',
             'web': '',
+            'venue_image': '',
+
         }
 
         widgets = {
@@ -26,12 +28,13 @@ class VenueFormAdmin(ModelForm):
 class VenueForm(ModelForm):
     class Meta:
         model = Venue
-        fields = ('name', 'address', 'phone')
+        fields = ('name', 'address', 'phone', 'venue_image')
 
         labels = {
             'name': '',
             'address': '',
             'phone': '',
+            'venue_image': '',
         }
 
         widgets = {

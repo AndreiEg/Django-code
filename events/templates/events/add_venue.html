@@ -10,7 +10,7 @@
     {% if submitted %}
     Your veunue was submitted
     {% else %}
-    <form action="" method=POST>
+    <form action="" method=POST enctype="multipart/form-data">
         {{ form.as_p }}
         {% csrf_token %}
         <input type="submit" value="Submit" class="btn btn-secondary">

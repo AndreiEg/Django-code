@@ -9,6 +9,17 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 
 
+def my_venues(request):
+    if request.user.is_authenticated:
+        me = request.user.id
+        venues = Venue.objects.filter(owner=me)
+        return render(request, 'events/my_venues.html', {
+            'venues': venues
+        })
+    else:
+        return redirect('add-venue')
+
+
 def delete_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
     if request.user.is_superuser:
@@ -41,9 +52,9 @@ def update_event(request, event_id):
 def update_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
     if request.user.is_superuser:
-        form = VenueFormAdmin(request.POST or None, instance=venue)
+        form = VenueFormAdmin(request.POST or None, request.FILES or None, instance=venue)
     else:
-        form = VenueForm(request.POST or None, instance=venue)
+        form = VenueForm(request.POST or None, request.FILES or None, instance=venue)
     if form.is_valid():
         form.save()
         return redirect('list-venues')
@@ -79,9 +90,9 @@ def add_venue(request):
     submitted = False
     if request.method == "POST":
         if request.user.is_superuser:
-            form = VenueFormAdmin(request.POST)
+            form = VenueFormAdmin(request.POST, request.FILES)
         else:
-            form = VenueForm(request.POST)
+            form = VenueForm(request.POST, request.FILES)
         if form.is_valid():
             venue = form.save(commit=False)
             venue.owner = request.user.id
