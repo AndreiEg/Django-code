@@ -3,15 +3,21 @@ import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Event, Venue
-from .forms import VenueForm
+from .forms import VenueForm, VenueFormAdmin
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
+from django.contrib import messages
 
 
 def delete_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
-    venue.delete()
-    return redirect('list-venues')
+    if request.user.is_superuser:
+        venue.delete()
+        messages.success(request,('Venue is deleted'))
+        return redirect('list-venues')
+    else:
+        messages.success(request, ('You are not admin'))
+        return redirect('list-venues')
 
 
 def delete_event(request, event_id):
@@ -22,7 +28,10 @@ def delete_event(request, event_id):
 
 def update_event(request, event_id):
     event = Event.objects.get(pk=event_id)
-    form = VenueForm(request.POST or None, instance=event)
+    if request.user.is_superuser:
+        form = VenueFormAdmin(request.POST or None, instance=event)
+    else:
+        form = VenueForm(request.POST or None, instance=event)
     if form.is_valid():
         form.save()
         return redirect('list-events')
@@ -31,7 +40,10 @@ def update_event(request, event_id):
 
 def update_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
-    form = VenueForm(request.POST or None, instance=venue)
+    if request.user.is_superuser:
+        form = VenueFormAdmin(request.POST or None, instance=venue)
+    else:
+        form = VenueForm(request.POST or None, instance=venue)
     if form.is_valid():
         form.save()
         return redirect('list-venues')
@@ -66,14 +78,20 @@ def list_venues(request):
 def add_venue(request):
     submitted = False
     if request.method == "POST":
-        form = VenueForm(request.POST)
+        if request.user.is_superuser:
+            form = VenueFormAdmin(request.POST)
+        else:
+            form = VenueForm(request.POST)
         if form.is_valid():
             venue = form.save(commit=False)
             venue.owner = request.user.id
             venue.save()
             return HttpResponseRedirect('/add_venue?submitted=True')
     else:
-        form = VenueForm
+        if request.user.is_superuser:
+            form = VenueFormAdmin
+        else:
+            form = VenueForm
         if 'submitted' in request.GET:
             submitted = True
     return render(request, 'events/add_venue.html', {'form': form, 'submitted': submitted})
