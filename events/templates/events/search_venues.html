@@ -3,15 +3,28 @@
 
 {% endblock %}
 {% block content %}
+<div class="container">
 {% if searched %}
 <h1>You search for {{ searched }}</h1>
 <br/>
 {% for venue in venues %}
+    <table class="table table-striped table-hover table-boarded">
+        <tr>
+        <td>
 <a href="{% url 'show-venue' venue.id %}">{{ venue }}</a><br/>
+            </td>
+            <td align="right">
+            <a href="{% url 'update-venue' venue.id %}" class="btn btn-outline-secondary btn-sm">Update</a>
+        </td>
+        <td align="right">
+            <a href="{% url 'delete-venue' venue.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+        </td>
+    </tr>
 {% endfor %}
 {% else %}
 <h1>You forgot to search</h1>
 {% endif %}
-
+        </table>
+</div>
 
 {% endblock %}

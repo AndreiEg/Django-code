@@ -5,6 +5,28 @@ from datetime import datetime
 from .models import Event, Venue
 from .forms import VenueForm
 from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator
+
+
+def delete_venue(request, venue_id):
+    venue = Venue.objects.get(pk=venue_id)
+    venue.delete()
+    return redirect('list-venues')
+
+
+def delete_event(request, event_id):
+    event = Event.objects.get(pk=event_id)
+    event.delete()
+    return redirect('list-events')
+
+
+def update_event(request, event_id):
+    event = Event.objects.get(pk=event_id)
+    form = VenueForm(request.POST or None, instance=event)
+    if form.is_valid():
+        form.save()
+        return redirect('list-events')
+    return render(request, 'events/update_event.html', {'event': event, 'form': form})
 
 
 def update_venue(request, venue_id):
@@ -32,8 +54,12 @@ def show_venue(request, venue_id):
 
 def list_venues(request):
     venue_list = Venue.objects.all()
+    p = Paginator(Venue.objects.all(), 1)
+    page = request.GET.get('page')
+    venues = p.get_page(page)
     return render(request, 'events/venues.html', {
-        'venue_list': venue_list
+        'venue_list': venue_list,
+        'venues': venues,
     })
 
 
@@ -52,8 +78,8 @@ def add_venue(request):
 
 
 def all_events(request):
-    event_list=Event.objects.all()
-    return render(request, 'events/event_list.html',{
+    event_list = Event.objects.all()
+    return render(request, 'events/event_list.html', {
         'event_list': event_list
     })
 
